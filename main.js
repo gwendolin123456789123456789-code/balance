@@ -5,7 +5,7 @@
 //  hoja como CSV.
 // ============================================================
 
-const SHEET_CSV_URL = ""; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1YKQmLbrByaNTubBGNJzjin3GHz2nV5QwBKs4PIzaGwA9fFc4N6h_C_hBlI4NhSDWbpEKghJz_hPc/pub?gid=0&single=true&output=csv"; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
 
 // Mapa global: id → objeto producto (evita pasar JSON en atributos HTML)
 window.productMap = {};
@@ -352,7 +352,7 @@ function checkout() {
   msg += `\n*Total estimado: ${formatPrice(total)}*`;
   if (notes) msg += `\n\n📝 Notas: ${notes}`;
 
-  const phone = "5491112345678"; // Reemplazá con el número real de WhatsApp del negocio
+  const phone = "5491154922392"; // Reemplazá con el número real de WhatsApp del negocio
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
