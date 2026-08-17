@@ -5,7 +5,7 @@
 //  hoja como CSV.
 // ============================================================
 
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1YKQmLbrByaNTubBGNJzjin3GHz2nV5QwBKs4PIzaGwA9fFc4N6h_C_hBlI4NhSDWbpEKghJz_hPc/pub?gid=0&single=true&output=csv"; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
+const SHEET_CSV_URL = ""; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
 
 // Mapa global: id → objeto producto (evita pasar JSON en atributos HTML)
 window.productMap = {};
@@ -124,24 +124,33 @@ function renderProducts(products) {
     return;
   }
 
-  // Categorías únicas para el sidebar
+  // Categorías únicas para el sidebar/filtros
   const cats = [...new Set(products.map(p => p.categoria).filter(Boolean))];
   const catList = document.getElementById("category-list");
+  
   if (catList) {
-    catList.innerHTML = cats.map(c => `
-      <li>
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer category-link" data-cat="${c}" href="#">
-          ${c} <span class="text-xs">${products.filter(p => p.categoria === c).length}</span>
-        </a>
-      </li>
+    const activeClass = "px-6 py-2 rounded-full border border-charcoal-slate bg-charcoal-slate text-linen-cream font-label-md text-label-md uppercase tracking-widest transition-colors";
+    const inactiveClass = "px-6 py-2 rounded-full border-[0.5px] border-charcoal-slate bg-transparent text-charcoal-slate font-label-md text-label-md uppercase tracking-widest hover:bg-muted-sage hover:border-muted-sage hover:text-linen-cream transition-colors";
+    
+    catList.innerHTML = `
+      <button class="${activeClass} category-link" data-cat="all">Todos</button>
+      ` + cats.map(c => `
+      <button class="${inactiveClass} category-link" data-cat="${c}">${c}</button>
     `).join("");
+
     // Filtro por categoría
-    catList.querySelectorAll(".category-link").forEach(link => {
-      link.addEventListener("click", e => {
+    catList.querySelectorAll(".category-link").forEach(btn => {
+      btn.addEventListener("click", e => {
         e.preventDefault();
-        catList.querySelectorAll(".category-link").forEach(l => l.classList.remove("text-primary", "font-bold"));
-        link.classList.add("text-primary", "font-bold");
-        const filtered = products.filter(p => p.categoria === link.dataset.cat);
+        // Reset styles
+        catList.querySelectorAll(".category-link").forEach(b => {
+          b.className = `${inactiveClass} category-link`;
+        });
+        // Set active style
+        btn.className = `${activeClass} category-link`;
+        
+        const cat = btn.dataset.cat;
+        const filtered = (cat === "all") ? products : products.filter(p => p.categoria === cat);
         renderProductCards(filtered, grid);
       });
     });
@@ -190,33 +199,26 @@ function renderProductCards(products, grid) {
   products.forEach(p => { window.productMap[p.id] = p; });
 
   products.forEach(p => {
-    const badge = p.badge ? `<span class="bg-error text-on-error text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">${p.badge}</span>` : "";
-    const oldPrice = p.precio_original ? `<span class="text-xs text-on-surface-variant line-through">${formatPrice(p.precio_original)}</span>` : "";
+    const badge = p.badge ? `<div class="absolute top-4 left-4"><span class="px-3 py-1 rounded-full border-[0.5px] border-charcoal-slate text-charcoal-slate font-label-sm text-label-sm uppercase bg-surface/50 backdrop-blur-sm">${p.badge}</span></div>` : "";
     grid.innerHTML += `
-      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden ambient-shadow transition-all duration-300 hover:-translate-y-1">
-        <div class="relative h-64 overflow-hidden">
-          <img alt="${p.nombre}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-               src="${p.imagen_url || 'https://placehold.co/400x300?text=Imagen'}"
-               onerror="this.src='https://placehold.co/400x300?text=${encodeURIComponent(p.nombre)}'">
-          ${p.badge ? `<div class="absolute top-2.5 left-3">${badge}</div>` : ""}
+      <article class="border border-muted-sage/30 bg-linen-cream p-8 group flex flex-col h-full transition-transform hover:-translate-y-1 duration-300">
+        <div class="aspect-square mb-8 relative border border-muted-sage/10 bg-off-white overflow-hidden">
+          <img class="w-full h-full object-cover opacity-90 mix-blend-multiply group-hover:scale-105 transition-transform duration-700" alt="${p.nombre}" src="${p.imagen_url || 'https://placehold.co/400x300?text=Imagen'}" onerror="this.src='https://placehold.co/400x300?text=${encodeURIComponent(p.nombre)}'">
+          ${badge}
         </div>
-        <div class="p-4 flex flex-col gap-2">
+        <div class="flex-grow flex flex-col justify-between">
           <div>
-            ${p.marca ? `<p class="text-xs text-on-surface-variant font-label-sm uppercase tracking-wider">${p.marca}</p>` : ""}
-            <h3 class="font-headline-md text-on-surface text-lg">${p.nombre}</h3>
+            <h3 class="font-headline-md text-headline-md text-charcoal-slate mb-2">${p.nombre}</h3>
+            <p class="font-body-md text-body-md text-secondary mb-4 line-clamp-2">${p.descripcion}</p>
           </div>
-          <p class="text-sm text-on-surface-variant line-clamp-2">${p.descripcion}</p>
-          <div class="mt-2 flex items-center justify-between">
-            <div class="flex flex-col">
-              ${oldPrice}
-              <span class="text-headline-md text-primary font-bold">${formatPrice(p.precio)}</span>
-            </div>
-            <button onclick="addToCartById('${p.id}')" class="bg-primary text-on-primary p-2 rounded-full hover:bg-primary/90 transition-all shadow-sm flex items-center justify-center">
-              <span class="material-symbols-outlined">add_shopping_cart</span>
+          <div class="flex items-end justify-between mt-6">
+            <span class="font-headline-md text-headline-md text-charcoal-slate">${formatPrice(p.precio)}</span>
+            <button onclick="addToCartById('${p.id}')" class="w-12 h-12 rounded-full border border-charcoal-slate flex items-center justify-center text-charcoal-slate hover:bg-muted-sage hover:border-muted-sage hover:text-linen-cream transition-colors group-hover:bg-charcoal-slate group-hover:text-linen-cream">
+              <span class="material-symbols-outlined">add</span>
             </button>
           </div>
         </div>
-      </div>
+      </article>
     `;
   });
 }
@@ -296,34 +298,32 @@ function renderCart() {
     subtotal += itemTotal;
     totalItems += item.quantity;
     container.innerHTML += `
-      <div class="bg-surface-container-lowest rounded-xl p-md ambient-shadow flex flex-col gap-sm relative group overflow-hidden">
-        <button onclick="removeFromCart('${item.id}')" class="absolute top-sm right-sm text-outline hover:text-error transition-colors p-1 rounded-full hover:bg-error-container/50">
-          <span class="material-symbols-outlined text-xl">close</span>
+      <div class="flex items-center gap-4 p-4 wireframe-border bg-linen-cream relative">
+        <div class="w-20 h-20 flex-shrink-0 border border-outline-variant/30 overflow-hidden bg-off-white">
+          <img class="w-full h-full object-cover mix-blend-multiply" alt="${item.nombre}" src="${item.imagen_url || ''}" onerror="this.src='https://placehold.co/200?text=${encodeURIComponent(item.nombre)}'">
+        </div>
+        <div class="flex-grow flex flex-col justify-between h-20">
+          <div>
+            <h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider mb-1 line-clamp-1">${item.nombre}</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">${formatPrice(itemTotal)}</p>
+          </div>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex items-center border border-charcoal-slate/30 rounded-sm">
+              <button onclick="changeQuantity('${item.id}', -1)" class="w-8 h-8 flex items-center justify-center text-charcoal-slate hover:bg-muted-sage/10 transition-colors">
+                <span class="material-symbols-outlined text-[16px]">remove</span>
+              </button>
+              <span class="w-8 text-center font-label-md text-label-md">${item.quantity}</span>
+              <button onclick="changeQuantity('${item.id}', 1)" class="w-8 h-8 flex items-center justify-center text-charcoal-slate hover:bg-muted-sage/10 transition-colors">
+                <span class="material-symbols-outlined text-[16px]">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button onclick="removeFromCart('${item.id}')" class="absolute top-4 right-4 text-outline hover:text-error transition-colors">
+          <span class="material-symbols-outlined">close</span>
         </button>
-        <div class="flex gap-md items-start">
-          <div class="w-24 h-24 rounded-lg bg-surface-container overflow-hidden shrink-0">
-            <img class="w-full h-full object-cover" src="${item.imagen_url || ''}"
-                 onerror="this.src='https://placehold.co/200?text=${encodeURIComponent(item.nombre)}'">
-          </div>
-          <div class="flex flex-col gap-xs flex-grow">
-            <h3 class="font-headline-md text-on-surface text-lg leading-tight">${item.nombre}</h3>
-            ${item.marca ? `<p class="font-label-sm text-label-sm text-on-surface-variant">${item.marca}</p>` : ""}
-            <p class="font-headline-md text-primary text-xl mt-auto">${formatPrice(item.precio)}</p>
-          </div>
-        </div>
-        <div class="flex items-center justify-between border-t border-surface-variant pt-sm mt-auto">
-          <div class="flex items-center gap-xs bg-surface-container-low rounded-full p-1">
-            <button onclick="changeQuantity('${item.id}', -1)" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
-              <span class="material-symbols-outlined text-sm">remove</span>
-            </button>
-            <span class="font-label-md text-on-surface w-6 text-center">${item.quantity}</span>
-            <button onclick="changeQuantity('${item.id}', 1)" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
-              <span class="material-symbols-outlined text-sm">add</span>
-            </button>
-          </div>
-          <p class="font-label-md text-on-surface-variant">Subtotal: <span class="font-headline-md text-on-background text-lg">${formatPrice(itemTotal)}</span></p>
-        </div>
-      </div>`;
+      </div>
+    `;
   });
   updateTotals(subtotal, totalItems);
 }
@@ -352,7 +352,7 @@ function checkout() {
   msg += `\n*Total estimado: ${formatPrice(total)}*`;
   if (notes) msg += `\n\n📝 Notas: ${notes}`;
 
-  const phone = "5491154922392"; // Reemplazá con el número real de WhatsApp del negocio
+  const phone = "5491112345678"; // Reemplazá con el número real de WhatsApp del negocio
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
