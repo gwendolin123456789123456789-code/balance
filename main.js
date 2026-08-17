@@ -5,59 +5,7 @@
 //  hoja como CSV.
 // ============================================================
 
-const SHEET_CSV_URL = ""; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
-
-// Productos de ejemplo que se usan si todavía no configuraste Google Sheets
-const DEMO_PRODUCTS = [
-  {
-    id: "barra-integra",
-    nombre: "Barra Integra",
-    marca: "Integra",
-    descripcion: "Barra de chocolate con avellanas. Snack saludable y nutritivo.",
-    precio: 2000,
-    precio_original: 2300,
-    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCHOkg7D2Sa8NcBcL3seaej2mr1YBwhQN1skcwORoKm-MUSkem89flLlKzymcbj58yuOg-X94a775p0tsJlPya7PWb8gz6ofM92aDc3yPKg3PnqHaLu1g0EKiv2F4YC3NSQ6ZPjOEezjkwz0CQh41a_UWt917RgmXjT64n51AAjBwvAbC36xzj--IaITxp90y-dAhVCPHzp8z521AzSbceTdhI96KrnorbWrCL9h3NTHidF45UhIlmb2t-XNoqYTM6gNw",
-    categoria: "Snacks Saludables",
-    badge: "OFERTA",
-    stock: "activo"
-  },
-  {
-    id: "miel-organica",
-    nombre: "Miel Orgánica de Prado",
-    marca: "Sin Marca",
-    descripcion: "Miel pura orgánica. Frasco de 500g cosechado artesanalmente.",
-    precio: 4500,
-    precio_original: "",
-    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuAeDYLflRNNVKfUyDme6HTtYiSRIpVbdJl83o8iPuNw1Sk9DTqML7_ttsg_vabjQIXUeMOnpCKiqkHJXllL_FN_NZUNCpHEH3M03ActGxnaaVGtPoUfUYAR1tUG8CakuYAMG-Q4xa8h7Yf1ZVxWGlhlnzfXkucMHK7_kEblzqS8DFqlfLzU7cAV5aqkU8NF7jwcXwwlNHlM7q8CR3GSYdk-WwNfSyI3_2hBGZ_7zAbkDO5vVj8XHI95",
-    categoria: "Harinas Orgánicas",
-    badge: "",
-    stock: "activo"
-  },
-  {
-    id: "mix-frutos",
-    nombre: "Mix Frutos Secos Premium",
-    marca: "EntreNuts",
-    descripcion: "La combinación perfecta de almendras, nueces y castañas.",
-    precio: 3200,
-    precio_original: "",
-    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuBBQ7A0WPJMRm1hDdYEcecet4XPKLw7d9i8y6FfNuokYmi0qm7eYm_8IoW37CE_9C4SW-VYt_l9kDmJU17K8Rw9R-Q_WUAaJSJA7U6Z4zsUbRBHmn6-99pOMOAgsPmU4qh5dKl5BHIJ5DSeiXSloQih2Q55facri1I2_t6cKSdVEXvU_HqHkclFff0bttlOX4scqJ9c3y1vP7OmXsWOKKb9xfEYScctr-t623R-i07OpkMjI6WhTAk2",
-    categoria: "Secos",
-    badge: "Novedad",
-    stock: "activo"
-  },
-  {
-    id: "jugo-detox",
-    nombre: "Jugo Detox Verde Cold-Pressed",
-    marca: "Sin Marca",
-    descripcion: "Botella de vidrio 500ml. Prensado en frío, sin conservantes.",
-    precio: 2800,
-    precio_original: "",
-    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCdpqapfqgpwzvdOxb5y3FdGvQLnkZ-45ZMYMpMIMOr-RntUiMy1ilPaUXE7pU3B62po0bCHsu4szVbkPCWV-E8bhBh_iXo0dyH-VQzOETg-OAVeMvn86YhldDF1V6_natEXedIShfDcA-avhDyiBLD7in4wRVCTFSZM7Xu61NTvm1Kw7J_UGVoPS24JN5_DsGDVHdU66aAspe-tEJj-nrWmxFJTm_tEiMGAkp8oxyx_D09CGergK-0",
-    categoria: "Snacks Saludables",
-    badge: "",
-    stock: "activo"
-  }
-];
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1omLVIj9MHzZAwTg4-iZOh8G45EcnBpIVXv-2xSVdNBs/edit?usp=sharing"; 
 
 // ============================================================
 //  Parseo de CSV
