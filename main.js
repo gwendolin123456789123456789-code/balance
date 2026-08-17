@@ -5,7 +5,7 @@
 //  hoja como CSV.
 // ============================================================
 
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1omLVIj9MHzZAwTg4-iZOh8G45EcnBpIVXv-2xSVdNBs/edit?usp=sharing"; 
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1YKQmLbrByaNTubBGNJzjin3GHz2nV5QwBKs4PIzaGwA9fFc4N6h_C_hBlI4NhSDWbpEKghJz_hPc/pubhtml"; 
 
 // ============================================================
 //  Parseo de CSV
