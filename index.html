@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balance — Tienda Natural</title>
+  <meta name="description" content="Balance: tu tienda de productos naturales y orgánicos. Harinas, snacks, frutos secos y más.">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-bright": "#f8f9fa", "tertiary-container": "#5dac5b", "tertiary": "#1b6d24",
+            "on-surface-variant": "#3f4a3c", "outline": "#6f7a6b",
+            "on-surface": "#191c1d", "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff", "surface-tint": "#006e1c",
+            "primary": "#006e1c", "on-primary": "#ffffff",
+            "on-tertiary-container": "#003c0a",
+            "surface-container-low": "#f3f4f5", "inverse-primary": "#78dc77",
+            "surface-variant": "#e1e3e4", "error": "#ba1a1a", "on-error": "#ffffff",
+            "error-container": "#ffdad6", "surface-container": "#edeeef",
+            "on-tertiary": "#ffffff", "surface-container-high": "#e7e8e9",
+            "surface-container-highest": "#e1e3e4", "surface": "#f8f9fa",
+            "primary-container": "#4caf50", "outline-variant": "#becab9",
+            "background": "#f8f9fa", "on-background": "#191c1d"
+          },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+          spacing: { lg: "48px", md: "24px", sm: "12px", xs: "4px", gutter: "24px", "margin-desktop": "64px", xl: "80px", "margin-mobile": "16px" },
+          fontFamily: { "headline-lg-mobile": ["Quicksand"], "label-sm": ["Inter"], "label-md": ["Inter"], "body-lg": ["Inter"], "body-md": ["Inter"], "headline-md": ["Quicksand"], "headline-lg": ["Quicksand"], display: ["Quicksand"] },
+          fontSize: {
+            "headline-lg-mobile": ["28px", { lineHeight: "36px", fontWeight: "600" }],
+            "label-sm": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+            "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "500" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+            display: ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #F5F5DC; margin: 0; padding-top: 80px; }
+    .ambient-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { animation: fadeInUp 0.4s ease both; }
+    .spinner { border: 3px solid #e1e3e4; border-top-color: #006e1c; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col">
+
+<!-- ── NAVBAR ─────────────────────────────────────────────── -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 bg-surface-bright shadow-sm">
+  <div class="flex items-center gap-xs">
+    <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1">eco</span>
+    <a href="index.html" class="font-display text-headline-md md:text-headline-lg text-primary tracking-tight">Balance</a>
+  </div>
+  <div class="hidden md:flex gap-lg items-center">
+    <a href="index.html" class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1">Tienda</a>
+  </div>
+  <div class="flex items-center gap-md">
+    <div class="hidden lg:flex relative">
+      <input id="search-desktop" class="search-input w-64 pl-10 pr-4 py-2 rounded-full border border-surface-variant bg-surface-container-lowest focus:outline-none focus:border-tertiary-container focus:ring-4 focus:ring-tertiary-container/20 transition-all font-body-md" placeholder="Buscar productos..." type="text">
+      <span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant">search</span>
+    </div>
+    <a href="cart.html" class="relative p-2 text-on-surface hover:text-primary transition-colors">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span id="cart-badge" class="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-on-error text-[10px] font-bold" style="display:none">0</span>
+    </a>
+    <button id="mobile-menu-btn" class="md:hidden p-2 text-on-surface">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── MAIN ───────────────────────────────────────────────── -->
+<main class="flex-grow container mx-auto px-margin-mobile md:px-margin-desktop py-lg grid grid-cols-4 md:grid-cols-12 gap-gutter">
+
+  <!-- Sidebar -->
+  <aside class="col-span-4 md:col-span-3 hidden md:block">
+    <div class="sticky top-28 space-y-lg">
+      <div>
+        <h3 class="font-headline-md text-headline-md text-on-surface mb-md">Categorías</h3>
+        <ul id="category-list" class="space-y-xs">
+          <li>
+            <a href="#" onclick="event.preventDefault(); window.currentFilter='all'; renderProducts(window.allProducts)" class="font-label-md text-label-md text-primary flex justify-between items-center px-3 py-2 rounded-lg bg-surface-container-low">
+              Todos los productos
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-headline-md text-headline-md text-on-surface mb-md">Filtrar por Marca</h3>
+        <div id="brand-list" class="space-y-sm">
+          <!-- JS renders brands -->
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Productos -->
+  <section class="col-span-4 md:col-span-9">
+    <!-- Mobile search -->
+    <div class="md:hidden flex gap-2 mb-md">
+      <div class="relative flex-grow">
+        <input id="search-mobile" class="search-input w-full pl-10 pr-4 py-3 rounded-full border border-surface-variant bg-surface-container-lowest focus:outline-none focus:border-tertiary-container font-body-md" placeholder="Buscar..." type="text">
+        <span class="material-symbols-outlined absolute left-4 top-3.5 text-on-surface-variant">search</span>
+      </div>
+    </div>
+
+    <!-- Hero banner -->
+    <div class="w-full h-64 md:h-80 rounded-xl mb-lg overflow-hidden relative group ambient-shadow cursor-pointer">
+      <div class="bg-cover bg-center w-full h-full transform transition-transform duration-700 group-hover:scale-105"
+           style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDXpmxA4KV9eFvT0h0YVlkSkLQj2KajIXaasAZdGWi73l_lvK3zR50hljDX8MjJaCGhCrakM4fber6R8ilnidBU2_xlE1oF8Jsg8NUFxIrQ1_fQRUePjoS778HeiKnAV2tYAcK8iENGQ7FZ6ma8KgAFlZBlvXIZmSeYLFgLBIWvkyBCZjDqaXKUhhXlG-ishPnQEwgPt5emqjopPAASIQYWG14WlXYn6wEVj01xP-I1aYLZtbsyeaBv')">
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+      <div class="absolute bottom-0 left-0 p-lg w-full">
+        <span class="inline-block px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full font-label-sm text-label-sm mb-2">Novedad</span>
+        <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-white mb-1 drop-shadow-md">Mix Energético Premium</h2>
+        <p class="font-body-lg text-body-lg text-white/90 hidden md:block max-w-md">La combinación perfecta de almendras, nueces y castañas para empezar tu día.</p>
+      </div>
+    </div>
+
+    <!-- Loading spinner -->
+    <div id="products-loading" class="flex justify-center items-center py-20" style="display:none!important">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Grid de productos -->
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
+      <!-- JS renders cards -->
+    </div>
+  </section>
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop flex flex-col items-center gap-md bg-surface-container-highest mt-auto">
+  <div class="font-headline-md text-headline-md text-primary">Balance</div>
+  <p class="font-body-md text-on-surface-variant text-center">Pronto mucho más, ¡seguinos!</p>
+  <p class="text-sm text-on-surface-variant opacity-70">© 2024 Balance. Naturalmente sano.</p>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
