@@ -5,7 +5,62 @@
 //  hoja como CSV.
 // ============================================================
 
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1YKQmLbrByaNTubBGNJzjin3GHz2nV5QwBKs4PIzaGwA9fFc4N6h_C_hBlI4NhSDWbpEKghJz_hPc/pub?gid=0&single=true&output=csv"; 
+const SHEET_CSV_URL = ""; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
+
+// Mapa global: id → objeto producto (evita pasar JSON en atributos HTML)
+window.productMap = {};
+
+// Productos de ejemplo que se usan si todavía no configuraste Google Sheets
+const DEMO_PRODUCTS = [
+  {
+    id: "barra-integra",
+    nombre: "Barra Integra",
+    marca: "Integra",
+    descripcion: "Barra de chocolate con avellanas. Snack saludable y nutritivo.",
+    precio: 2000,
+    precio_original: 2300,
+    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCHOkg7D2Sa8NcBcL3seaej2mr1YBwhQN1skcwORoKm-MUSkem89flLlKzymcbj58yuOg-X94a775p0tsJlPya7PWb8gz6ofM92aDc3yPKg3PnqHaLu1g0EKiv2F4YC3NSQ6ZPjOEezjkwz0CQh41a_UWt917RgmXjT64n51AAjBwvAbC36xzj--IaITxp90y-dAhVCPHzp8z521AzSbceTdhI96KrnorbWrCL9h3NTHidF45UhIlmb2t-XNoqYTM6gNw",
+    categoria: "Snacks Saludables",
+    badge: "OFERTA",
+    stock: "activo"
+  },
+  {
+    id: "miel-organica",
+    nombre: "Miel Orgánica de Prado",
+    marca: "Sin Marca",
+    descripcion: "Miel pura orgánica. Frasco de 500g cosechado artesanalmente.",
+    precio: 4500,
+    precio_original: "",
+    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuAeDYLflRNNVKfUyDme6HTtYiSRIpVbdJl83o8iPuNw1Sk9DTqML7_ttsg_vabjQIXUeMOnpCKiqkHJXllL_FN_NZUNCpHEH3M03ActGxnaaVGtPoUfUYAR1tUG8CakuYAMG-Q4xa8h7Yf1ZVxWGlhlnzfXkucMHK7_kEblzqS8DFqlfLzU7cAV5aqkU8NF7jwcXwwlNHlM7q8CR3GSYdk-WwNfSyI3_2hBGZ_7zAbkDO5vVj8XHI95",
+    categoria: "Harinas Orgánicas",
+    badge: "",
+    stock: "activo"
+  },
+  {
+    id: "mix-frutos",
+    nombre: "Mix Frutos Secos Premium",
+    marca: "EntreNuts",
+    descripcion: "La combinación perfecta de almendras, nueces y castañas.",
+    precio: 3200,
+    precio_original: "",
+    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuBBQ7A0WPJMRm1hDdYEcecet4XPKLw7d9i8y6FfNuokYmi0qm7eYm_8IoW37CE_9C4SW-VYt_l9kDmJU17K8Rw9R-Q_WUAaJSJA7U6Z4zsUbRBHmn6-99pOMOAgsPmU4qh5dKl5BHIJ5DSeiXSloQih2Q55facri1I2_t6cKSdVEXvU_HqHkclFff0bttlOX4scqJ9c3y1vP7OmXsWOKKb9xfEYScctr-t623R-i07OpkMjI6WhTAk2",
+    categoria: "Secos",
+    badge: "Novedad",
+    stock: "activo"
+  },
+  {
+    id: "jugo-detox",
+    nombre: "Jugo Detox Verde Cold-Pressed",
+    marca: "Sin Marca",
+    descripcion: "Botella de vidrio 500ml. Prensado en frío, sin conservantes.",
+    precio: 2800,
+    precio_original: "",
+    imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCdpqapfqgpwzvdOxb5y3FdGvQLnkZ-45ZMYMpMIMOr-RntUiMy1ilPaUXE7pU3B62po0bCHsu4szVbkPCWV-E8bhBh_iXo0dyH-VQzOETg-OAVeMvn86YhldDF1V6_natEXedIShfDcA-avhDyiBLD7in4wRVCTFSZM7Xu61NTvm1Kw7J_UGVoPS24JN5_DsGDVHdU66aAspe-tEJj-nrWmxFJTm_tEiMGAkp8oxyx_D09CGergK-0",
+    categoria: "Snacks Saludables",
+    badge: "",
+    stock: "activo"
+  }
+];
 
 // ============================================================
 //  Parseo de CSV
@@ -131,6 +186,9 @@ function renderProductCards(products, grid) {
     grid.innerHTML = `<p class="col-span-full text-center text-on-surface-variant py-10">No se encontraron productos.</p>`;
     return;
   }
+  // Guardar en mapa global para acceso seguro desde onclick
+  products.forEach(p => { window.productMap[p.id] = p; });
+
   products.forEach(p => {
     const badge = p.badge ? `<span class="bg-error text-on-error text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">${p.badge}</span>` : "";
     const oldPrice = p.precio_original ? `<span class="text-xs text-on-surface-variant line-through">${formatPrice(p.precio_original)}</span>` : "";
@@ -143,12 +201,9 @@ function renderProductCards(products, grid) {
           ${p.badge ? `<div class="absolute top-2.5 left-3">${badge}</div>` : ""}
         </div>
         <div class="p-4 flex flex-col gap-2">
-          <div class="flex justify-between items-start">
-            <div>
-              ${p.marca ? `<p class="text-xs text-on-surface-variant font-label-sm uppercase tracking-wider">${p.marca}</p>` : ""}
-              <h3 class="font-headline-md text-on-surface text-lg">${p.nombre}</h3>
-            </div>
-            <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">favorite</span>
+          <div>
+            ${p.marca ? `<p class="text-xs text-on-surface-variant font-label-sm uppercase tracking-wider">${p.marca}</p>` : ""}
+            <h3 class="font-headline-md text-on-surface text-lg">${p.nombre}</h3>
           </div>
           <p class="text-sm text-on-surface-variant line-clamp-2">${p.descripcion}</p>
           <div class="mt-2 flex items-center justify-between">
@@ -156,7 +211,7 @@ function renderProductCards(products, grid) {
               ${oldPrice}
               <span class="text-headline-md text-primary font-bold">${formatPrice(p.precio)}</span>
             </div>
-            <button onclick="addToCartById('${p.id}', ${JSON.stringify(p).replace(/'/g, "\\'")})" class="bg-primary text-on-primary p-2 rounded-full hover:bg-primary/90 transition-all shadow-sm flex items-center justify-center">
+            <button onclick="addToCartById('${p.id}')" class="bg-primary text-on-primary p-2 rounded-full hover:bg-primary/90 transition-all shadow-sm flex items-center justify-center">
               <span class="material-symbols-outlined">add_shopping_cart</span>
             </button>
           </div>
@@ -178,7 +233,9 @@ function saveCart(cart) {
   updateCartBadge();
 }
 
-function addToCartById(id, productData) {
+function addToCartById(id) {
+  const productData = window.productMap[id];
+  if (!productData) { console.error('Producto no encontrado:', id); return; }
   let cart = getCart();
   let existing = cart.find(i => i.id === id);
   if (existing) {
