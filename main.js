@@ -352,7 +352,7 @@ function checkout() {
   msg += `\n*Total estimado: ${formatPrice(total)}*`;
   if (notes) msg += `\n\n📝 Notas: ${notes}`;
 
-  const phone = "5491112345678"; // Reemplazá con el número real de WhatsApp del negocio
+  const phone = "5491154922392"; // Reemplazá con el número real de WhatsApp del negocio
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
