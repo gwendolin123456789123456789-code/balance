@@ -20,7 +20,7 @@ const DEMO_PRODUCTS = [
     categoria: "Snacks Saludables",
     badge: "OFERTA",
     stock: "activo"
-  },
+   },
   {
     id: "miel-organica",
     nombre: "Miel Orgánica de Prado",
@@ -31,8 +31,8 @@ const DEMO_PRODUCTS = [
     imagen_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuAeDYLflRNNVKfUyDme6HTtYiSRIpVbdJl83o8iPuNw1Sk9DTqML7_ttsg_vabjQIXUeMOnpCKiqkHJXllL_FN_NZUNCpHEH3M03ActGxnaaVGtPoUfUYAR1tUG8CakuYAMG-Q4xa8h7Yf1ZVxWGlhlnzfXkucMHK7_kEblzqS8DFqlfLzU7cAV5aqkU8NF7jwcXwwlNHlM7q8CR3GSYdk-WwNfSyI3_2hBGZ_7zAbkDO5vVj8XHI95",
     categoria: "Harinas Orgánicas",
     badge: "",
-    stock: "activo"
-  },
+   stock: "activo"
+   },
   {
     id: "mix-frutos",
     nombre: "Mix Frutos Secos Premium",
@@ -44,7 +44,7 @@ const DEMO_PRODUCTS = [
     categoria: "Secos",
     badge: "Novedad",
     stock: "activo"
-  },
+   },
   {
     id: "jugo-detox",
     nombre: "Jugo Detox Verde Cold-Pressed",
@@ -56,7 +56,18 @@ const DEMO_PRODUCTS = [
     categoria: "Snacks Saludables",
     badge: "",
     stock: "activo"
-  }
+   },
+  {
+    id: "Granola-Integra",
+    nombre: "Granola Integra",
+    marca: "Integra",
+    descripcion: "La combinación perfecta de almendras, nueces y castañas.",
+    precio: 6000,
+    precio_original: "",
+    imagen_url: "blob:https://web.whatsapp.com/aa4026a3-ddef-4b0f-a22d-c6bf3ba1d14c",
+    categoria: "Integra",
+    badge: "Novedad",
+    stock: "activo"
 ];
 
 // ============================================================
