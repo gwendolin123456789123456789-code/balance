@@ -5,7 +5,7 @@
 //  hoja como CSV.
 // ============================================================
 
-const SHEET_CSV_URL = ""; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1omLVIj9MHzZAwTg4-iZOh8G45EcnBpIVXv-2xSVdNBs/edit?usp=sharing"; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
 
 // Productos de ejemplo que se usan si todavía no configuraste Google Sheets
 const DEMO_PRODUCTS = [
