@@ -177,5 +177,30 @@
 </div>
 </footer>
 
+<!-- Product Modal -->
+<div id="product-modal" class="fixed inset-0 z-[100] bg-charcoal-slate/40 backdrop-blur-sm hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="if(event.target === this) closeModal()">
+  <div id="product-modal-content" class="bg-linen-cream border border-muted-sage/30 rounded-xl w-full max-w-md overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+    <div class="relative w-full h-64 sm:h-80 bg-off-white">
+      <img id="modal-img" class="w-full h-full object-cover mix-blend-multiply" src="">
+      <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-surface/80 flex items-center justify-center text-charcoal-slate hover:bg-muted-sage hover:text-linen-cream transition-colors">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+    <div class="p-6 flex flex-col gap-4 overflow-y-auto">
+      <div>
+        <h2 id="modal-title" class="font-headline-md text-headline-md text-charcoal-slate leading-tight"></h2>
+        <p id="modal-category" class="font-label-sm text-label-sm text-muted-sage uppercase tracking-widest mt-1"></p>
+      </div>
+      <p id="modal-desc" class="font-body-md text-body-md text-secondary leading-relaxed"></p>
+      <div class="flex items-center justify-between mt-2 pt-4 border-t border-muted-sage/20">
+        <span id="modal-price" class="font-headline-lg text-[24px] text-charcoal-slate"></span>
+        <button id="modal-add-btn" class="px-6 py-3 rounded-full border border-charcoal-slate bg-charcoal-slate text-linen-cream font-label-md text-label-md uppercase tracking-widest transition-colors flex items-center gap-2 hover:bg-muted-sage hover:border-muted-sage">
+          <span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="main.js"></script>
 </body></html>
