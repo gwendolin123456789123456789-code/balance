@@ -5,7 +5,7 @@
 //  hoja como CSV.
 // ============================================================
 
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1YKQmLbrByaNTubBGNJzjin3GHz2nV5QwBKs4PIzaGwA9fFc4N6h_C_hBlI4NhSDWbpEKghJz_hPc/pub?gid=0&single=true&output=csv"; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
+const SHEET_CSV_URL = ""; // 👈 Pegá aquí el link de tu Google Sheets publicado como CSV
 
 // Mapa global: id → objeto producto (evita pasar JSON en atributos HTML)
 window.productMap = {};
@@ -199,21 +199,21 @@ function renderProductCards(products, grid) {
   products.forEach(p => { window.productMap[p.id] = p; });
 
   products.forEach(p => {
-    const badge = p.badge ? `<div class="absolute top-1 left-1 md:top-4 md:left-4"><span class="px-1 py-0.5 md:px-3 md:py-1 rounded-full border-[0.5px] border-charcoal-slate text-charcoal-slate font-label-sm text-[8px] md:text-label-sm uppercase bg-surface/50 backdrop-blur-sm">${p.badge}</span></div>` : "";
+    const badge = p.badge ? `<div class="absolute top-1 left-1 md:top-4 md:left-4 z-10"><span class="px-1 py-0.5 md:px-3 md:py-1 rounded-full border-[0.5px] border-charcoal-slate text-charcoal-slate font-label-sm text-[8px] md:text-label-sm uppercase bg-surface/50 backdrop-blur-sm">${p.badge}</span></div>` : "";
     grid.innerHTML += `
-      <article class="border border-muted-sage/30 bg-linen-cream p-2 md:p-8 group flex flex-col h-full transition-transform hover:-translate-y-1 duration-300">
-        <div class="aspect-square mb-2 md:mb-8 relative border border-muted-sage/10 bg-off-white overflow-hidden">
+      <article class="border border-muted-sage/30 bg-linen-cream p-2 md:p-8 group flex flex-col h-full transition-transform hover:-translate-y-1 duration-300 relative cursor-pointer">
+        <div class="aspect-square mb-2 md:mb-8 relative border border-muted-sage/10 bg-off-white overflow-hidden" onclick="openModal('${p.id}')">
           <img class="w-full h-full object-cover opacity-90 mix-blend-multiply group-hover:scale-105 transition-transform duration-700" alt="${p.nombre}" src="${p.imagen_url || 'https://placehold.co/400x300?text=Imagen'}" onerror="this.src='https://placehold.co/400x300?text=${encodeURIComponent(p.nombre)}'">
           ${badge}
         </div>
         <div class="flex-grow flex flex-col justify-between">
-          <div>
+          <div onclick="openModal('${p.id}')">
             <h3 class="font-headline-md text-xs md:text-headline-md text-charcoal-slate mb-1 md:mb-2 leading-tight">${p.nombre}</h3>
             <p class="font-body-md text-[10px] md:text-body-md text-secondary mb-2 md:mb-4 line-clamp-2 md:line-clamp-3 leading-tight hidden sm:block">${p.descripcion}</p>
           </div>
           <div class="flex items-end justify-between mt-2 md:mt-6">
             <span class="font-headline-md text-sm md:text-headline-md text-charcoal-slate font-semibold">${formatPrice(p.precio)}</span>
-            <button onclick="addToCartById('${p.id}')" class="w-7 h-7 md:w-12 md:h-12 rounded-full border border-charcoal-slate flex items-center justify-center text-charcoal-slate hover:bg-muted-sage hover:border-muted-sage hover:text-linen-cream transition-colors group-hover:bg-charcoal-slate group-hover:text-linen-cream">
+            <button onclick="addToCartById('${p.id}'); event.stopPropagation();" class="w-7 h-7 md:w-12 md:h-12 rounded-full border border-charcoal-slate flex items-center justify-center text-charcoal-slate hover:bg-muted-sage hover:border-muted-sage hover:text-linen-cream transition-colors group-hover:bg-charcoal-slate group-hover:text-linen-cream z-20">
               <span class="material-symbols-outlined text-[16px] md:text-[24px]">add</span>
             </button>
           </div>
@@ -221,6 +221,44 @@ function renderProductCards(products, grid) {
       </article>
     `;
   });
+}
+
+// ============================================================
+//  Modal de Producto
+// ============================================================
+function openModal(id) {
+  const p = window.productMap[id];
+  if(!p) return;
+  
+  document.getElementById('modal-img').src = p.imagen_url || 'https://placehold.co/400x300?text=Imagen';
+  document.getElementById('modal-title').textContent = p.nombre;
+  document.getElementById('modal-category').textContent = p.marca || p.categoria || '';
+  document.getElementById('modal-desc').textContent = p.descripcion;
+  document.getElementById('modal-price').textContent = formatPrice(p.precio);
+  
+  const addBtn = document.getElementById('modal-add-btn');
+  addBtn.onclick = () => {
+    addToCartById(p.id);
+    closeModal();
+  };
+  
+  const modal = document.getElementById('product-modal');
+  modal.classList.remove('hidden');
+  modal.style.display = 'flex';
+  setTimeout(() => {
+    modal.classList.remove('opacity-0');
+    document.getElementById('product-modal-content').classList.remove('scale-95');
+  }, 10);
+}
+
+function closeModal() {
+  const modal = document.getElementById('product-modal');
+  modal.classList.add('opacity-0');
+  document.getElementById('product-modal-content').classList.add('scale-95');
+  setTimeout(() => {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+  }, 300);
 }
 
 // ============================================================
@@ -352,7 +390,7 @@ function checkout() {
   msg += `\n*Total estimado: ${formatPrice(total)}*`;
   if (notes) msg += `\n\n📝 Notas: ${notes}`;
 
-  const phone = "5491154922392"; // Reemplazá con el número real de WhatsApp del negocio
+  const phone = "5491112345678"; // Reemplazá con el número real de WhatsApp del negocio
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
